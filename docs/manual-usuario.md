@@ -3,7 +3,7 @@
 **Versión:** 1.0  
 **Fecha:** 22 de enero de 2026  
 **Desarrollado por:** Martín Sánchez Novo  
-**Contacto:** martin.sanchez@example.com
+**Contacto:** martin.sanchez@fernandowirtz.com
 
 ---
 
@@ -149,7 +149,7 @@ Puedes pulsar "Cancelar" en cualquier momento para volver atrás sin guardar nad
 
 Si tienes dudas, sugerencias o necesitas asistencia técnica, puedes contactarnos a través de:
 
-**Email:** martin.sanchez@example.com  
+**Email:** martin.sanchez@fernandowirtz.com  
 **Desarrollador:** Martín Sánchez Novo  
 
 ### Reportar un problema
@@ -161,7 +161,7 @@ Para reportar errores o problemas técnicos:
 3. Incluye capturas de pantalla si es posible
 Si tienes dudas o encuentras algún problema, puedes contactarme:
 
-**Email:** martin.sanchez@example.com
+**Email:** martin.sanchez@fernandowirtz.com
 
 Para reportar errores, por favor incluye:
 - Descripción del problema
@@ -171,7 +171,3 @@ Para reportar errores, por favor incluye:
 Cualquier sugerencia de mejora es bienvenida. Puedes seguir el desarrollo del proyecto en:
 
 **GitHub:** https://github.com/martinwirtzfp/ThePrancingPony
-
----
-
-**© 2026 The Prancing Pony
