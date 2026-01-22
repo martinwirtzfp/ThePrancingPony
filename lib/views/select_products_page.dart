@@ -111,6 +111,7 @@ class _SelectProductsPageState extends State<SelectProductsPage> {
                           children: [
                             // Botón -
                             IconButton(
+                              tooltip: 'Reducir cantidad',
                               onPressed: quantity > 0
                                   ? () {
                                       setState(() {
@@ -143,6 +144,7 @@ class _SelectProductsPageState extends State<SelectProductsPage> {
 
                             // Botón +
                             IconButton(
+                              tooltip: 'Aumentar cantidad',
                               onPressed: () {
                                 setState(() {
                                   selectedItems[product] = quantity + 1;
@@ -206,32 +208,38 @@ class _SelectProductsPageState extends State<SelectProductsPage> {
                 Row(
                   children: [
                     Expanded(
-                      child: OutlinedButton(
-                        onPressed: () {
-                          // Cancelar: volver sin datos
-                          Navigator.pop(context);
-                        },
-                        style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.all(16),
+                      child: Tooltip(
+                        message: 'Cancelar sin guardar cambios',
+                        child: OutlinedButton(
+                          onPressed: () {
+                            // Cancelar: volver sin datos
+                            Navigator.pop(context);
+                          },
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.all(16),
+                          ),
+                          child: const Text('Cancelar'),
                         ),
-                        child: const Text('Cancelar'),
                       ),
                     ),
                     const SizedBox(width: 10),
                     Expanded(
-                      child: ElevatedButton(
-                        onPressed: selectedItems.isEmpty
-                            ? null
-                            : () {
-                                // Volver a la pantalla anterior con los productos seleccionados
-                                Navigator.pop(context, selectedItems);
-                              },
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.all(16),
-                          backgroundColor: Colors.green,
-                          foregroundColor: Colors.white,
+                      child: Tooltip(
+                        message: 'Confirmar productos seleccionados',
+                        child: ElevatedButton(
+                          onPressed: selectedItems.isEmpty
+                              ? null
+                              : () {
+                                  // Volver a la pantalla anterior con los productos seleccionados
+                                  Navigator.pop(context, selectedItems);
+                                },
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.all(16),
+                            backgroundColor: Colors.green,
+                            foregroundColor: Colors.white,
+                          ),
+                          child: const Text('Confirmar Selección'),
                         ),
-                        child: const Text('Confirmar Selección'),
                       ),
                     ),
                   ],

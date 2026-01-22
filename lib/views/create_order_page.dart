@@ -55,13 +55,16 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                 hintText: 'Ej: 1, 2, 3...',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.table_restaurant),
+                helperText: 'Introduce el número de la mesa',
               ),
             ),
             const SizedBox(height: 20),
 
             // Botón para elegir productos
-            ElevatedButton.icon(
-              onPressed: () async {
+            Tooltip(
+              message: 'Seleccionar productos del menú',
+              child: ElevatedButton.icon(
+                onPressed: () async {
                 // Navegar a la pantalla de selección de productos y esperar resultado
                 final Map<Product, int>? products = await Navigator.push(
                   context,
@@ -77,12 +80,24 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                   setState(() {
                     selectedProducts = products;
                   });
+                  
+                  // Mostrar snackbar informativo
+                  if (!mounted) return;
+                  final totalProducts = products.values.fold<int>(0, (sum, qty) => sum + qty);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('$totalProducts producto${totalProducts != 1 ? 's' : ''} seleccionado${totalProducts != 1 ? 's' : ''}'),
+                      backgroundColor: Colors.green,
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
                 }
               },
-              icon: const Icon(Icons.shopping_cart),
-              label: const Text('Añadir Productos'),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.all(16),
+                icon: const Icon(Icons.shopping_cart),
+                label: const Text('Añadir Productos'),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(16),
+                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -163,7 +178,9 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
 
             // Botón para ver resumen (con pushNamed)
             if (selectedProducts.isNotEmpty)
-              ElevatedButton.icon(
+              Tooltip(
+                message: 'Ver resumen detallado del pedido',
+                child: ElevatedButton.icon(
                 onPressed: () {
                   // Navegación mediante ruta con nombre, pasando argumentos
                   Navigator.pushNamed(
@@ -175,12 +192,13 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                     },
                   );
                 },
-                icon: const Icon(Icons.visibility),
-                label: const Text('Ver Resumen'),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(16),
-                  backgroundColor: Colors.blue,
-                  foregroundColor: Colors.white,
+                  icon: const Icon(Icons.visibility),
+                  label: const Text('Ver Resumen'),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(16),
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                  ),
                 ),
               ),
             const SizedBox(height: 10),
@@ -222,8 +240,22 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                       if (table == null || table <= 0) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('El número de mesa debe ser válido'),
+                            content: Text('El número de mesa debe ser un número válido mayor que 0'),
                             backgroundColor: Colors.red,
+                            duration: Duration(seconds: 3),
+                          ),
+                        );
+                        return;
+                      }
+
+                      // Validar que la mesa no exista ya
+                      final viewModel = context.read<OrderViewModel>();
+                      if (viewModel.getOrderByTable(table) != null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('La mesa $table ya tiene un pedido activo'),
+                            backgroundColor: Colors.orange,
+                            duration: const Duration(seconds: 3),
                           ),
                         );
                         return;
@@ -233,15 +265,15 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                       if (selectedProducts.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('Añade al menos un producto'),
+                            content: Text('Añade al menos un producto al pedido'),
                             backgroundColor: Colors.red,
+                            duration: Duration(seconds: 3),
                           ),
                         );
                         return;
                       }
 
-                      // Obtener el ViewModel y crear el pedido
-                      final viewModel = context.read<OrderViewModel>();
+                      // Crear el pedido
                       viewModel.createOrder(table);
                       
                       // Añadir cada producto seleccionado al pedido creado

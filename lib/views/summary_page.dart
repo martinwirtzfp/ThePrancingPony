@@ -187,19 +187,22 @@ class SummaryPage extends StatelessWidget {
             const SizedBox(height: 20),
 
             // Botón para volver
-            ElevatedButton(
-              onPressed: () {
-                // Volver con Navigator.pop
-                Navigator.pop(context);
-              },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.all(16),
-                backgroundColor: Colors.blue,
-                foregroundColor: Colors.white,
-              ),
-              child: const Text(
-                'Volver a Edición',
-                style: TextStyle(fontSize: 16),
+            Tooltip(
+              message: 'Volver a editar el pedido',
+              child: ElevatedButton(
+                onPressed: () {
+                  // Volver con Navigator.pop
+                  Navigator.pop(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(16),
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                ),
+                child: const Text(
+                  'Volver a Edición',
+                  style: TextStyle(fontSize: 16),
+                ),
               ),
             ),
           ],

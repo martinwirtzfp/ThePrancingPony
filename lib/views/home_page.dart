@@ -37,28 +37,31 @@ class HomePage extends StatelessWidget {
             itemBuilder: (context, index) {
               final order = viewModel.orders[index];
               
-              return Card(
-                margin: const EdgeInsets.only(bottom: 12),
-                child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.orange,
-                    child: Text(
-                      '${order.table}',
+              return Tooltip(
+                message: 'Mesa ${order.table}: ${order.totalItems} producto${order.totalItems != 1 ? 's' : ''} - ${order.total.toStringAsFixed(2)}€',
+                child: Card(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.orange,
+                      child: Text(
+                        '${order.table}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    title: Text(
+                      'Mesa ${order.table}',
                       style: const TextStyle(
-                        color: Colors.white,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-                  title: Text(
-                    'Mesa ${order.table}',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                    subtitle: Text(
+                      'Productos: ${order.totalItems} - Total: ${order.total.toStringAsFixed(2)}€',
                     ),
-                  ),
-                  subtitle: Text(
-                    'Productos: ${order.totalItems} - Total: ${order.total.toStringAsFixed(2)}€',
                   ),
                 ),
               );
@@ -67,6 +70,7 @@ class HomePage extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
+        tooltip: 'Crear nuevo pedido',
         onPressed: () async {
           // Navegación imperativa con Navigator.push y espera del resultado
           final Order? newOrder = await Navigator.push(
