@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tarea_4_1_interfaces/models/product.dart';
 
+/// Pantalla para seleccionar productos del menú del bar.
+///
+/// Muestra una lista de productos disponibles con controles para
+/// incrementar/decrementar cantidades. Al confirmar, devuelve un Map
+/// con los productos seleccionados y sus cantidades.
 class SelectProductsPage extends StatefulWidget {
   const SelectProductsPage({super.key});
 
@@ -9,7 +14,6 @@ class SelectProductsPage extends StatefulWidget {
 }
 
 class _SelectProductsPageState extends State<SelectProductsPage> {
-  // Carta del bar (al menos 6 productos)
   final List<Product> menuItems = [
     Product('Cerveza', 2.50),
     Product('Café', 1.50),
@@ -21,7 +25,6 @@ class _SelectProductsPageState extends State<SelectProductsPage> {
     Product('Patatas Fritas', 3.00),
   ];
 
-  // Map para guardar las cantidades seleccionadas: {Product: cantidad}
   final Map<Product, int> selectedItems = {};
 
   double calculateTotal() {
@@ -111,6 +114,8 @@ class _SelectProductsPageState extends State<SelectProductsPage> {
                               onPressed: quantity > 0
                                   ? () {
                                       setState(() {
+                                        // Si la cantidad es 1, eliminar el producto del Map
+                                        // Si es mayor, decrementar la cantidad
                                         if (quantity == 1) {
                                           selectedItems.remove(product);
                                         } else {
@@ -218,7 +223,7 @@ class _SelectProductsPageState extends State<SelectProductsPage> {
                         onPressed: selectedItems.isEmpty
                             ? null
                             : () {
-                                // Confirmar: volver con los productos seleccionados
+                                // Volver a la pantalla anterior con los productos seleccionados
                                 Navigator.pop(context, selectedItems);
                               },
                         style: ElevatedButton.styleFrom(

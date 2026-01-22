@@ -4,6 +4,10 @@ import 'package:tarea_4_1_interfaces/models/product.dart';
 import 'package:tarea_4_1_interfaces/viewmodels/ordersViewModel.dart';
 import 'package:tarea_4_1_interfaces/views/select_products_page.dart';
 
+/// Pantalla para crear un nuevo pedido.
+///
+/// Permite al usuario introducir el número de mesa, seleccionar productos
+/// del menú y ver un resumen antes de guardar el pedido.
 class CreateOrderPage extends StatefulWidget {
   const CreateOrderPage({super.key});
 
@@ -21,6 +25,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     super.dispose();
   }
 
+  /// Calcula el total del pedido actual sumando el precio de todos los productos.
   double calculateTotal() {
     double total = 0.0;
     selectedProducts.forEach((product, quantity) {
@@ -57,7 +62,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             // Botón para elegir productos
             ElevatedButton.icon(
               onPressed: () async {
-                // Navigator.push para ir a elegir productos
+                // Navegar a la pantalla de selección de productos y esperar resultado
                 final Map<Product, int>? products = await Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -65,10 +70,9 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                   ),
                 );
 
-                // Verificar mounted antes de usar setState
                 if (!mounted) return;
 
-                // Si el usuario seleccionó productos, actualizar
+                // Actualizar los productos seleccionados con los devueltos por la pantalla
                 if (products != null) {
                   setState(() {
                     selectedProducts = products;
@@ -161,7 +165,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             if (selectedProducts.isNotEmpty)
               ElevatedButton.icon(
                 onPressed: () {
-                  // Navegación con pushNamed (ruta con nombre)
+                  // Navegación mediante ruta con nombre, pasando argumentos
                   Navigator.pushNamed(
                     context,
                     '/summary',
@@ -200,9 +204,9 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
-                      // Validaciones
                       final tableText = tableController.text.trim();
                       
+                      // Validar que se haya introducido un número de mesa
                       if (tableText.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -213,6 +217,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                         return;
                       }
 
+                      // Validar que el número de mesa sea válido y mayor que 0
                       final table = int.tryParse(tableText);
                       if (table == null || table <= 0) {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -224,6 +229,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                         return;
                       }
 
+                      // Validar que se hayan seleccionado productos
                       if (selectedProducts.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -234,19 +240,18 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                         return;
                       }
 
-                      // Crear el pedido y añadirlo al ViewModel
+                      // Obtener el ViewModel y crear el pedido
                       final viewModel = context.read<OrderViewModel>();
                       viewModel.createOrder(table);
                       
-                      // Añadir cada producto al pedido
+                      // Añadir cada producto seleccionado al pedido creado
                       selectedProducts.forEach((product, quantity) {
                         viewModel.addProductToOrder(table, product, quantity);
                       });
 
-                      // Obtener el pedido completo
                       final completedOrder = viewModel.getOrderByTable(table);
 
-                      // Guardar: volver con el pedido creado
+                      // Volver a la pantalla anterior devolviendo el pedido creado
                       Navigator.pop(context, completedOrder);
                     },
                     style: ElevatedButton.styleFrom(

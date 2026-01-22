@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:tarea_4_1_interfaces/models/product.dart';
 
+/// Pantalla de resumen del pedido.
+///
+/// Muestra un resumen detallado del pedido antes de guardarlo,
+/// incluyendo el número de mesa, lista de productos, cantidades,
+/// precios individuales y total.
 class SummaryPage extends StatelessWidget {
   const SummaryPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Obtener los argumentos pasados con pushNamed
+    // Obtener argumentos pasados mediante pushNamed desde CreateOrderPage
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final String table = args['table'];
     final Map<Product, int> products = args['products'];
 
-    // Calcular total
+    // Calcular totales del pedido
     double total = 0.0;
     int totalProducts = 0;
     products.forEach((product, quantity) {

@@ -4,6 +4,10 @@ import 'package:tarea_4_1_interfaces/models/order.dart';
 import 'package:tarea_4_1_interfaces/viewmodels/ordersViewModel.dart';
 import 'package:tarea_4_1_interfaces/views/create_order_page.dart';
 
+/// Pantalla principal que muestra la lista de pedidos activos.
+///
+/// Esta vista consume el [OrderViewModel] para mostrar todas las mesas
+/// con pedidos activos y permite crear nuevos pedidos.
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -14,9 +18,9 @@ class HomePage extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('Pedidos del Bar'),
       ),
+      // Consumer escucha los cambios del ViewModel y reconstruye cuando hay notificaciones
       body: Consumer<OrderViewModel>(
         builder: (context, viewModel, child) {
-          // Si no hay pedidos, mostrar mensaje
           if (viewModel.orders.isEmpty) {
             return const Center(
               child: Text(
@@ -26,7 +30,7 @@ class HomePage extends StatelessWidget {
             );
           }
 
-          // Si hay pedidos, mostrar lista
+          // Lista de Cards con información de cada mesa
           return ListView.builder(
             padding: const EdgeInsets.all(16),
             itemCount: viewModel.orders.length,
@@ -64,7 +68,7 @@ class HomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
-          // Navegación imperativa con Navigator.push
+          // Navegación imperativa con Navigator.push y espera del resultado
           final Order? newOrder = await Navigator.push(
             context,
             MaterialPageRoute(
@@ -72,10 +76,10 @@ class HomePage extends StatelessWidget {
             ),
           );
 
-          // Verificar mounted antes de usar context
+          // Verificar que el widget sigue montado antes de usar el context
           if (!context.mounted) return;
 
-          // Si el usuario guardó el pedido, mostrar confirmación
+          // Mostrar confirmación si se creó el pedido
           if (newOrder != null) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(

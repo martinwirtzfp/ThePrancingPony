@@ -2,58 +2,61 @@ import 'package:flutter/material.dart';
 import 'package:tarea_4_1_interfaces/models/order.dart';
 import 'package:tarea_4_1_interfaces/models/product.dart';
 
+/// ViewModel que gestiona la lógica de negocio de los pedidos.
+///
+/// Implementa el patrón MVVM y extiende ChangeNotifier para notificar
+/// a las vistas cuando hay cambios en los datos.
 class OrderViewModel extends ChangeNotifier {
-  // Lista de todos los pedidos (todas las mesas)
   List<Order> orders = [];
 
-  // Crear un nuevo pedido (abrir mesa)
+  /// Crea un nuevo pedido si no existe ya una mesa con ese número.
   void createOrder(int tableNumber) {
-    // Verificar que la mesa no exista ya
     if (!orders.any((order) => order.table == tableNumber)) {
       orders.add(Order(tableNumber, {}));
       notifyListeners();
     }
   }
 
-  // Eliminar un pedido (cerrar mesa)
+  /// Elimina un pedido de la lista de pedidos activos.
   void deleteOrder(int tableNumber) {
     orders.removeWhere((order) => order.table == tableNumber);
     notifyListeners();
   }
 
-  // Añadir producto a una mesa específica
+  /// Añade un producto a una mesa específica.
+  /// Si el producto ya existe, suma la cantidad.
   void addProductToOrder(int tableNumber, Product product, int quantity) {
     try {
       Order order = orders.firstWhere((o) => o.table == tableNumber);
-      order.addProduct(product, quantity); //método de order
+      order.addProduct(product, quantity);
       notifyListeners();
     } catch (e) {
       print('Error: Mesa $tableNumber no encontrada');
     }
   }
 
-  // Eliminar producto de una mesa
+  /// Elimina un producto de una mesa específica.
   void deleteProductFromOrder(int tableNumber, Product product) {
     try {
       Order order = orders.firstWhere((o) => o.table == tableNumber);
-      order.deleteProduct(product); //método de order
+      order.deleteProduct(product);
       notifyListeners();
     } catch (e) {
       print('Error: Mesa $tableNumber no encontrada');
     }
   }
 
-  // Obtener el importe total de una mesa
+  /// Obtiene el importe total de una mesa. Retorna 0.0 si no existe.
   double getTableTotal(int tableNumber) {
     try {
       Order order = orders.firstWhere((o) => o.table == tableNumber);
-      return order.total; //método de order
+      return order.total;
     } catch (e) {
       return 0.0;
     }
   }
 
-  // Obtener el pedido de una mesa
+  /// Obtiene el pedido completo de una mesa. Retorna null si no existe.
   Order? getOrderByTable(int tableNumber) {
     try {
       return orders.firstWhere((o) => o.table == tableNumber);
@@ -62,7 +65,7 @@ class OrderViewModel extends ChangeNotifier {
     }
   }
 
-  // Cargar pedidos de iniciales
+  /// Carga pedidos de ejemplo para demostración.
   void loadInitialOrders() {
     orders.addAll([
       Order(1, {Product('Cerveza', 2.5): 2, Product('Tapa', 4.0): 2}),
