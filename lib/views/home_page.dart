@@ -16,7 +16,21 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text('Pedidos del Bar'),
+        title: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(40),
+              child: Image.asset(
+                'assets/images/prancing_pony_logo.jpg',
+                height: 45,
+                width: 60,
+                fit: BoxFit.contain,
+              ),
+            ),
+            const SizedBox(width: 12),
+            const Text('The Prancing Pony'),
+          ],
+        ),
       ),
       // Consumer escucha los cambios del ViewModel y reconstruye cuando hay notificaciones
       body: Consumer<OrderViewModel>(
